@@ -311,12 +311,14 @@ export async function loginOnServer(
     })
     const body = (await res.json().catch(() => ({}))) as {
       error?: string
+      detail?: string
       userId?: string
       roleId?: string
       data?: LmsData
     }
     if (!res.ok || !body.userId || !body.data) {
-      return { ok: false, error: body.error ?? 'Sign-in failed.', status: res.status }
+      const msg = [body.error ?? 'Sign-in failed.', body.detail].filter(Boolean).join(' ')
+      return { ok: false, error: msg, status: res.status }
     }
     return {
       ok: true,

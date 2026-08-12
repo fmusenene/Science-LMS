@@ -34,7 +34,9 @@ function getSql() {
     throw new Error('DATABASE_URL is not set. Add it in Vercel Environment Variables and redeploy.')
   }
   if (!sql) {
-    sql = neon(normalizeDatabaseUrl(raw))
+    sql = neon(normalizeDatabaseUrl(raw), {
+      fetchOptions: { cache: 'no-store' },
+    })
   }
   return sql
 }
@@ -58,9 +60,9 @@ function normalize(parsed: LmsData): LmsData {
   return sanitizeNotifications(parsed)
 }
 
-function asJsonPayload(data: LmsData) {
-  // neon tagged templates accept objects as JSON; string + ::jsonb is also fine.
-  return JSON.stringify(sanitizeNotifications(data))
+function parsePayload(raw: unknown): LmsData {
+  if (typeof raw === 'string') return normalize(JSON.parse(raw) as LmsData)
+  return normalize(raw as LmsData)
 }
 
 async function seedIfEmpty(): Promise<LmsData> {
@@ -68,22 +70,18 @@ async function seedIfEmpty(): Promise<LmsData> {
   const { data: hashedSeed } = ensureHashedPasswords(seed)
   const clean = sanitizeNotifications(hashedSeed)
   const db = getSql()
+
+  // Pass a JS object — the Neon driver serializes it to JSONB.
   await db`
     INSERT INTO lms_data (id, payload, updated_at)
-    VALUES (${ROW_ID}, ${asJsonPayload(clean)}::jsonb, NOW())
+    VALUES (${ROW_ID}, ${clean as never}, NOW())
     ON CONFLICT (id) DO NOTHING
   `
-  // Re-read in case another instance seeded first.
+
   const rows = await db`
     SELECT payload FROM lms_data WHERE id = ${ROW_ID} LIMIT 1
   `
-  if (rows[0]?.payload) {
-    return normalize(
-      typeof rows[0].payload === 'string'
-        ? (JSON.parse(rows[0].payload) as LmsData)
-        : (rows[0].payload as LmsData),
-    )
-  }
+  if (rows[0]?.payload) return parsePayload(rows[0].payload)
   return clean
 }
 
@@ -98,12 +96,7 @@ export async function readNeonData(): Promise<LmsData> {
     return seedIfEmpty()
   }
 
-  const parsed = normalize(
-    typeof rows[0].payload === 'string'
-      ? (JSON.parse(rows[0].payload) as LmsData)
-      : (rows[0].payload as LmsData),
-  )
-
+  const parsed = parsePayload(rows[0].payload)
   if (!parsed?.roles?.length || !parsed?.users?.length) {
     return seedIfEmpty()
   }
@@ -120,7 +113,7 @@ export async function writeNeonData(data: LmsData): Promise<LmsData> {
   const db = getSql()
   await db`
     INSERT INTO lms_data (id, payload, updated_at)
-    VALUES (${ROW_ID}, ${asJsonPayload(clean)}::jsonb, NOW())
+    VALUES (${ROW_ID}, ${clean as never}, NOW())
     ON CONFLICT (id) DO UPDATE
       SET payload = EXCLUDED.payload,
           updated_at = NOW()
@@ -141,7 +134,7 @@ export async function writeNeonDataIfRevision(
   const db = getSql()
   const rows = await db`
     UPDATE lms_data
-    SET payload = ${asJsonPayload(clean)}::jsonb,
+    SET payload = ${clean as never},
         updated_at = NOW()
     WHERE id = ${ROW_ID}
       AND COALESCE((payload->>'revision')::int, 0) = ${expectedRevision}
