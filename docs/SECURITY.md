@@ -41,15 +41,16 @@ This is **not** a substitute for a dedicated identity provider (SSO), WAF, or ma
 
 ## Deployment checklist
 
-1. Set a long random `LMS_SESSION_SECRET` in `.env.local` / host env (≥ 32 chars). 
-2. Serve only over **HTTPS**. 
-3. Change all seeded account passwords. 
-4. Restrict OS permissions on `data/lms-db.json`. 
-5. Disable or remove demo “Reset to clean system” on production if not needed. 
-6. Keep Node/Next updated; run `npm audit` regularly. 
-7. Back up `data/lms-db.json` on a schedule. 
-8. Prefer a firewall / VPN so the LMS is not open to the whole internet unless required. 
-9. Review custom roles so teachers never receive `users.manage` / `roles.manage` by mistake.
+1. Set a long random `LMS_SESSION_SECRET` in `.env.local` / host env (≥ 32 chars).
+2. For Vercel, also set `DATABASE_URL` to a Neon (or other Postgres) connection string. See [VERCEL.md](./VERCEL.md).
+3. Serve only over **HTTPS** (Vercel does this automatically).
+4. Change all seeded account passwords.
+5. If you still use the local file DB, restrict OS permissions on `data/lms-db.json`.
+6. Disable or remove demo "Reset to clean system" on production if not needed.
+7. Keep Node/Next updated; run `npm audit` regularly.
+8. Back up Neon (or `data/lms-db.json`) on a schedule.
+9. Prefer a firewall / VPN for non-Vercel hosts if the LMS is not meant to be public.
+10. Review custom roles so teachers never receive `users.manage` / `roles.manage` by mistake.
 
 ---
 

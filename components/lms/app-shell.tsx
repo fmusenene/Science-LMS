@@ -189,7 +189,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
         <footer className="border-t border-border/70 px-4 py-3 text-xs text-muted-foreground sm:px-6 lg:px-8">
           <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-2">
             <span>
-              Shared database on this server so teacher and admin see the same requisitions.
+              Shared database so teacher and admin see the same requisitions.
               Idle sessions sign out after 5 minutes.
             </span>
             {can('settings.manage') ? (

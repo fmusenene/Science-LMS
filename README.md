@@ -94,10 +94,12 @@ npm start
 
 | Variable | Required | Description |
 |----------|----------|-------------|
-| `LMS_SESSION_SECRET` | Yes (production) | Secret used to sign session cookies (≥ 32 characters). See `.env.example`. |
+| `LMS_SESSION_SECRET` | Yes (production / Vercel) | Secret used to sign session cookies (≥ 32 characters). |
+| `DATABASE_URL` | Yes on Vercel | Neon (or Postgres) connection string for shared sync. Optional locally. |
 
 > `.env.local` is gitignored. Never commit real secrets.  
-> `data/lms-db.json` is generated at runtime and also gitignored.
+> Without `DATABASE_URL`, local dev uses `data/lms-db.json` (also gitignored).  
+> See [docs/VERCEL.md](docs/VERCEL.md) for free Vercel + Neon setup.
 
 ---
 
@@ -183,6 +185,13 @@ docs/                      # Extended documentation
 | [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) | System design, data model, sync |
 | [docs/API.md](docs/API.md) | HTTP API reference |
 | [docs/SECURITY.md](docs/SECURITY.md) | Auth, hardening, deployment checklist |
+| [docs/VERCEL.md](docs/VERCEL.md) | Free Vercel + Neon Postgres hosting |
+
+### Host on Vercel (free)
+
+Local file storage does not work on Vercel. Set a free Neon `DATABASE_URL` plus `LMS_SESSION_SECRET`, then deploy. Full steps: [docs/VERCEL.md](docs/VERCEL.md).
+
+Without `DATABASE_URL`, `npm run dev` still uses `data/lms-db.json` on your machine.
 
 ---
 

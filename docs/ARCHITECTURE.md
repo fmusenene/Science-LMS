@@ -3,18 +3,19 @@
 ## High-level design
 
 ```text
-┌─────────────────────┐ cookie session ┌──────────────────────────┐
-│ Browser (React) │ ◄──────────────────────► │ Next.js API (Node) │
-│ LmsProvider store │ GET/PUT /api/lms/data │ lib/server-db.ts │
-│ localStorage cache │ POST /api/lms/auth/* │ data/lms-db.json │
-└─────────────────────┘ └──────────────────────────┘
+Browser (React + LmsProvider)
+        |  cookie session
+        v
+Next.js API  ->  lib/server-db.ts
+                    |-- no DATABASE_URL  ->  data/lms-db.json (local)
+                    |-- DATABASE_URL set ->  Neon Postgres lms_data (Vercel)
 ```
 
-- **UI + domain actions** live in the client store (`lib/lms-store.tsx`). 
-- **Source of truth** for multi-user sync is the server file `data/lms-db.json`. 
+- **UI + domain actions** live in the client store (`lib/lms-store.tsx`).
+- **Source of truth** for multi-user sync is either the local JSON file or Neon, depending on `DATABASE_URL`.
 - **Auth** is enforced on the API; the UI also gates routes and actions with permissions.
 
-This fits a **single-school / single-server** deployment (lab PC or small VPS). It is not a horizontally scaled multi-region design.
+For free Vercel hosting, see [VERCEL.md](./VERCEL.md).
 
 ---
 
@@ -25,7 +26,8 @@ This fits a **single-school / single-server** deployment (lab PC or small VPS). 
 | `lib/lms-store.tsx` | In-memory LMS state, mutations, permission checks, login/logout wiring |
 | `lib/lms-persistence.ts` | Partitioned `localStorage`, BroadcastChannel tab sync, fetch/push helpers |
 | `lib/lms-merge.ts` | Merge requisitions/notifications/core so concurrent edits are not lost |
-| `lib/server-db.ts` | Atomic file read/write queue, seed-on-missing, merge-and-save |
+| `lib/server-db.ts` | Chooses file or Neon; merge-and-save; seed-on-missing |
+| `lib/db/neon-store.ts` | Neon/Postgres JSON document store with optimistic writes |
 | `lib/scheduling.ts` | Periods, overlap detection, conflict issues, formatters |
 | `lib/permissions.ts` | Permission IDs, catalogues, default role sets, route gates |
 | `lib/security/*` | Password hashing, session tokens, rate limits, secret stripping |
