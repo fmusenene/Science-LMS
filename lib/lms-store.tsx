@@ -208,7 +208,7 @@ function backfillPendingNotificationsForStaff(draft: LmsData, staffUserId: strin
       id: uid('ntf'),
       userId: staffUserId,
       title: 'Pending approval',
-      body: `${teacher?.name ?? 'A teacher'} submitted ${req.reference} — ${req.topic}. ${pendingCount} requisition${pendingCount === 1 ? '' : 's'} awaiting approval.`,
+      body: `${teacher?.name ?? 'A teacher'} submitted ${req.reference} (${req.topic}). ${pendingCount} requisition${pendingCount === 1 ? '' : 's'} awaiting approval.`,
       kind: 'requisition.submitted',
       href: `/requisitions/${req.id}`,
       requisitionId: req.id,
@@ -469,7 +469,7 @@ export function LmsProvider({ children }: { children: React.ReactNode }) {
     const result = persistData(data)
     if (result === 'fail') {
       toast.warning(
-        'Could not fully save. Requisitions are stored separately — if problems continue, free browser storage.',
+        'Could not fully save. Requisitions are stored separately. If problems continue, free browser storage.',
         { duration: 8_000, id: 'lms-storage-fail' },
       )
     }
@@ -657,7 +657,7 @@ export function LmsProvider({ children }: { children: React.ReactNode }) {
 
       pushNotifications(draft, staffIds, {
         title: 'Pending approval',
-        body: `${teacher?.name ?? 'A teacher'} submitted ${req.reference} — ${req.topic}. ${pendingCount} requisition${pendingCount === 1 ? '' : 's'} awaiting approval.`,
+        body: `${teacher?.name ?? 'A teacher'} submitted ${req.reference} (${req.topic}). ${pendingCount} requisition${pendingCount === 1 ? '' : 's'} awaiting approval.`,
         kind: 'requisition.submitted',
         href: `/requisitions/${req.id}`,
         requisitionId: req.id,
@@ -803,7 +803,7 @@ export function LmsProvider({ children }: { children: React.ReactNode }) {
               error:
                 labIssue?.message ??
                 other?.message ??
-                'Cannot submit — resolve the errors shown on the form first.',
+                'Cannot submit. Please fix the errors shown on the form first.',
             }
           }
         }
@@ -1336,7 +1336,7 @@ export function LmsProvider({ children }: { children: React.ReactNode }) {
         if (live.length) {
           return {
             ok: false,
-            error: `Cannot delete — ${live.length} active booking(s) still use this lab.`,
+            error: `Cannot delete. ${live.length} active booking(s) still use this lab.`,
           }
         }
         mutate((draft) => {

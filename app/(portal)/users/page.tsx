@@ -118,7 +118,7 @@ export default function UsersPage() {
                 )}
               </div>
               <p className="text-xs text-muted-foreground">
-                {roleById(user.roleId)?.name ?? '—'} · {user.staffNo}
+                {roleById(user.roleId)?.name ?? 'Not set'} · {user.staffNo}
                 {user.department ? ` · ${user.department}` : ''}
               </p>
               <div className="flex flex-wrap gap-2">
@@ -159,9 +159,9 @@ export default function UsersPage() {
                     <p className="font-medium">{user.name}</p>
                     <p className="text-xs text-muted-foreground">{user.email}</p>
                   </TableCell>
-                  <TableCell>{roleById(user.roleId)?.name ?? '—'}</TableCell>
+                  <TableCell>{roleById(user.roleId)?.name ?? 'Not set'}</TableCell>
                   <TableCell className="num">{user.staffNo}</TableCell>
-                  <TableCell>{user.department ?? '—'}</TableCell>
+                  <TableCell>{user.department ?? 'Not set'}</TableCell>
                   <TableCell>
                     {user.active ? (
                       <Badge className="border-transparent bg-success-muted text-success">Active</Badge>

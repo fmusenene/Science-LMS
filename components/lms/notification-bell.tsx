@@ -124,7 +124,7 @@ export function NotificationBell() {
               onClick={() => setOpen(false)}
             >
               <span className="font-medium text-warning-foreground">
-                {pendingCount} pending approval{pendingCount === 1 ? '' : 's'} — all teachers
+                {pendingCount} pending approval{pendingCount === 1 ? '' : 's'} from all teachers
               </span>
               <span className="text-primary">Open queue →</span>
             </Link>

@@ -344,7 +344,7 @@ export default function InventoryPage() {
       <Dialog open={stockOpen} onOpenChange={setStockOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Adjust stock — {selected?.name}</DialogTitle>
+            <DialogTitle>Adjust stock: {selected?.name}</DialogTitle>
             <DialogDescription>
               Current on hand: {selected?.onHand} {selected?.unit}
             </DialogDescription>

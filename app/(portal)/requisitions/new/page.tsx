@@ -266,7 +266,7 @@ export default function NewRequisitionPage() {
           const capIssue = liveIssues.find((i) => i.level === 'error' && i.code === 'over_capacity')
           const first =
             labIssue ?? stockIssue ?? capIssue ?? liveIssues.find((i) => i.level === 'error')
-          toast.error(first?.message ?? 'Cannot submit — fix the errors on the form first.', {
+          toast.error(first?.message ?? 'Cannot submit. Please fix the errors on the form first.', {
             duration: 12_000,
             id: 'req-conflict',
           })
@@ -314,7 +314,7 @@ export default function NewRequisitionPage() {
       toast.dismiss('req-conflict')
       toast.success(
         result.submitted
-          ? 'Submitted — admin and attendants can now review this request'
+          ? 'Submitted. Admin and attendants can now review this request.'
           : 'Draft saved',
         { duration: 5_500, id: 'req-save' },
       )
@@ -366,7 +366,7 @@ export default function NewRequisitionPage() {
 
       <PageHeader
         title="New practical requisition"
-        description="Select lab, timetable slot, student numbers and the apparatus / chemical / reagent checklist."
+        description="Choose the lab, timetable slot, class size, and the apparatus, chemical or reagent checklist."
       />
 
       <div className="grid gap-4 pb-24 lg:grid-cols-3 lg:pb-0">
@@ -473,7 +473,7 @@ export default function NewRequisitionPage() {
                 >
                   {periods.map((p) => (
                     <option key={p.id} value={p.id}>
-                      {p.label} ({p.start}–{p.end})
+                      {p.label} ({p.start} to {p.end})
                     </option>
                   ))}
                 </select>
@@ -575,7 +575,7 @@ export default function NewRequisitionPage() {
             <CardContent className="space-y-3">
               {submitDone ? (
                 <p className="text-sm font-medium text-success">
-                  Submitted successfully — opening your requisitions list…
+                  Submitted successfully. Opening your requisitions list…
                 </p>
               ) : (
                 <>
@@ -589,15 +589,15 @@ export default function NewRequisitionPage() {
               )}
               <div className="rounded-lg bg-muted/60 px-3 py-2 text-xs text-muted-foreground">
                 <p>
-                  Lab capacity: <span className="num font-medium text-foreground">{lab?.capacity ?? '—'}</span>
+                  Lab capacity: <span className="num font-medium text-foreground">{lab?.capacity ?? 'Not set'}</span>
                 </p>
                 <p className="font-medium text-foreground">
                   Your selection: {lab?.name ?? 'Lab'} · {date} · {period?.label ?? 'Period'} (
-                  {slot.start}–{slot.end})
+                  {slot.start} to {slot.end})
                 </p>
                 {labBlocked && !submitDone ? (
                   <p className="mt-1 font-medium text-destructive">
-                    Submission blocked — this lab is taken for that period. Pick another lab, period or
+                    Submission blocked. This lab is taken for that period. Pick another lab, period or
                     date.
                   </p>
                 ) : null}
@@ -607,7 +607,7 @@ export default function NewRequisitionPage() {
                     <ul className="list-disc space-y-0.5 pl-4">
                       {takenSlots.map((t) => (
                         <li key={t.id}>
-                          {t.label} ({formatSlot(t.slot)}) — {t.reference}
+                          {t.label} ({formatSlot(t.slot)}): {t.reference}
                           {t.slot.periodId && periodId === t.slot.periodId
                             ? ' ← conflicts with your selection'
                             : ''}
@@ -616,7 +616,7 @@ export default function NewRequisitionPage() {
                     </ul>
                   </div>
                 ) : !submitDone ? (
-                  <p className="mt-1">No other bookings for this lab on this date — slot is free.</p>
+                  <p className="mt-1">No other bookings for this lab on this date. The slot is free.</p>
                 ) : null}
               </div>
               <div className="hidden flex-col gap-2 lg:flex">

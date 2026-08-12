@@ -180,7 +180,7 @@ export default function SchedulePage() {
           className="w-full sm:w-auto"
         />
         <p className="text-sm text-muted-foreground">
-          {weekStart ? `Week of ${weekStart} · Mon–Fri` : 'Loading week…'}
+          {weekStart ? `Week of ${weekStart}, Mon to Fri` : 'Loading week…'}
         </p>
       </div>
 
@@ -330,12 +330,12 @@ export default function SchedulePage() {
 
               {!editing ? (
                 <div className="grid gap-3 text-sm sm:grid-cols-2">
-                  <Field label="Laboratory" value={labById(selected.labId)?.name ?? '—'} />
+                  <Field label="Laboratory" value={labById(selected.labId)?.name ?? 'Not set'} />
                   <Field
                     label="Slot"
                     value={`${formatDate(selected.slot.date)} · ${formatSlot(selected.slot)}`}
                   />
-                  <Field label="Teacher" value={userById(selected.teacherId)?.name ?? '—'} />
+                  <Field label="Teacher" value={userById(selected.teacherId)?.name ?? 'Not set'} />
                   <Field
                     label="Class"
                     value={`${selected.form} · ${selected.studentCount} students`}
@@ -385,7 +385,7 @@ export default function SchedulePage() {
                       >
                         {periods.map((p) => (
                           <option key={p.id} value={p.id}>
-                            {p.label} ({p.start}–{p.end})
+                            {p.label} ({p.start} to {p.end})
                           </option>
                         ))}
                       </select>

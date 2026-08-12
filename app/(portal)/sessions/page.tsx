@@ -67,18 +67,18 @@ export default function SessionsPage() {
                       </p>
                     </TableCell>
                     <TableCell>
-                      <p className="font-medium">{req?.topic ?? '—'}</p>
+                      <p className="font-medium">{req?.topic ?? 'Not set'}</p>
                       <p className="text-xs text-muted-foreground">
-                        {labById(req?.labId)?.name ?? '—'} · {req?.subject ?? '—'}
+                        {labById(req?.labId)?.name ?? 'Not set'} · {req?.subject ?? 'Not set'}
                       </p>
                     </TableCell>
                     <TableCell className="text-xs">
                       <p>
-                        Planned {formatTime(session.plannedStart)}–{formatTime(session.plannedEnd)} (
+                        Planned {formatTime(session.plannedStart)} to {formatTime(session.plannedEnd)} (
                         {durationMinutes(session.plannedStart, session.plannedEnd)}m)
                       </p>
                       <p>
-                        Actual {formatTime(session.actualStart)}–{formatTime(session.actualEnd)} (
+                        Actual {formatTime(session.actualStart)} to {formatTime(session.actualEnd)} (
                         {durationMinutes(session.actualStart, session.actualEnd)}m)
                       </p>
                     </TableCell>
@@ -93,13 +93,13 @@ export default function SessionsPage() {
                           <p className="text-xs text-muted-foreground">
                             {reasons.find((r) => r.id === session.notDoneReason)?.label ??
                               session.notDoneReason ??
-                              '—'}
+                              'Not set'}
                           </p>
                         </div>
                       )}
                     </TableCell>
                     <TableCell className="num">{session.studentsPresent}</TableCell>
-                    <TableCell>{userById(session.loggedBy)?.name ?? '—'}</TableCell>
+                    <TableCell>{userById(session.loggedBy)?.name ?? 'Not set'}</TableCell>
                   </TableRow>
                 )
               })
@@ -125,7 +125,7 @@ export default function SessionsPage() {
                   </p>
                   <p className="text-xs text-muted-foreground">{b.cause}</p>
                   <p className="mt-1 text-xs text-muted-foreground">
-                    {userById(b.reportedBy)?.name ?? '—'} · {formatDateTime(b.reportedAt)}
+                    {userById(b.reportedBy)?.name ?? 'Not set'} · {formatDateTime(b.reportedAt)}
                   </p>
                 </div>
               ))

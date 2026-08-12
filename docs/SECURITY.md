@@ -27,12 +27,12 @@ Science LMS is hardened for a **school intranet / single-server** deployment. Tr
 
 | Risk | Mitigation / residual |
 |------|------------------------|
-| Unauthenticated DB dump | Mitigated — API requires session |
+| Unauthenticated DB dump | Mitigated. API requires session |
 | Session cookie theft | Use HTTPS in production (`Secure` cookie flag). SameSite=Strict reduces CSRF |
 | Weak demo password | Change immediately; rotate `LMS_SESSION_SECRET` |
 | File DB on disk | OS file permissions matter; backup securely |
 | XSS | React escaping; CSP; no `dangerouslySetInnerHTML` in app code |
-| Horizontal scale | File lock is per process — one writer node only |
+| Horizontal scale | File lock is per process. One writer node only |
 | Client-side store | Domain logic in the browser; API still authenticates writes |
 
 This is **not** a substitute for a dedicated identity provider (SSO), WAF, or managed database when serving untrusted networks.
@@ -41,14 +41,14 @@ This is **not** a substitute for a dedicated identity provider (SSO), WAF, or ma
 
 ## Deployment checklist
 
-1. Set a long random `LMS_SESSION_SECRET` in `.env.local` / host env (≥ 32 chars).  
-2. Serve only over **HTTPS**.  
-3. Change all seeded account passwords.  
-4. Restrict OS permissions on `data/lms-db.json`.  
-5. Disable or remove demo “Reset to clean system” on production if not needed.  
-6. Keep Node/Next updated; run `npm audit` regularly.  
-7. Back up `data/lms-db.json` on a schedule.  
-8. Prefer a firewall / VPN so the LMS is not open to the whole internet unless required.  
+1. Set a long random `LMS_SESSION_SECRET` in `.env.local` / host env (≥ 32 chars). 
+2. Serve only over **HTTPS**. 
+3. Change all seeded account passwords. 
+4. Restrict OS permissions on `data/lms-db.json`. 
+5. Disable or remove demo “Reset to clean system” on production if not needed. 
+6. Keep Node/Next updated; run `npm audit` regularly. 
+7. Back up `data/lms-db.json` on a schedule. 
+8. Prefer a firewall / VPN so the LMS is not open to the whole internet unless required. 
 9. Review custom roles so teachers never receive `users.manage` / `roles.manage` by mistake.
 
 ---

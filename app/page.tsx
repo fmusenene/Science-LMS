@@ -63,21 +63,21 @@ export default function LoginPage() {
             </div>
           </div>
           <p className="text-base leading-relaxed text-muted-foreground">
-            Track apparatus, chemicals and reagents across Labs 1–6, book practical lessons without
-            double-booking rooms, and close every session with stock reconciliation.
+            Keep track of apparatus, chemicals and reagents across all labs. Book practical lessons
+            without double booking rooms, and close every session with a proper stock check.
           </p>
           <ul className="grid gap-2 text-sm text-foreground/80 sm:grid-cols-2">
             <li className="rounded-lg bg-card/70 px-3 py-2 ring-1 ring-foreground/8">
-              Single sign-in with admin-managed roles
+              Sign in once with roles your admin manages
             </li>
             <li className="rounded-lg bg-card/70 px-3 py-2 ring-1 ring-foreground/8">
-              Conflict checks for rooms and overlapping stock
+              Spot room clashes and overlapping stock needs
             </li>
             <li className="rounded-lg bg-card/70 px-3 py-2 ring-1 ring-foreground/8">
-              Status pipeline from draft to completed
+              Follow each request from draft to completed
             </li>
             <li className="rounded-lg bg-card/70 px-3 py-2 ring-1 ring-foreground/8">
-              Post-lab consumable deduction and breakage logs
+              Record what was used and any breakages after class
             </li>
           </ul>
         </div>

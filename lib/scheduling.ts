@@ -46,7 +46,7 @@ export function slotsOverlap(a: TimeSlot, b: TimeSlot) {
 }
 
 export function formatSlot(slot: TimeSlot) {
-  return `${slot.start} - ${slot.end}`
+  return `${slot.start} to ${slot.end}`
 }
 
 export function formatDate(iso: string) {
@@ -59,7 +59,7 @@ export function formatDate(iso: string) {
 }
 
 export function formatDateTime(iso?: string) {
-  if (!iso) return '—'
+  if (!iso) return 'Not set'
   const d = new Date(iso)
   return d.toLocaleString('en-GB', {
     day: 'numeric',
@@ -71,7 +71,7 @@ export function formatDateTime(iso?: string) {
 }
 
 export function formatTime(iso?: string) {
-  if (!iso) return '—'
+  if (!iso) return 'Not set'
   return new Date(iso).toLocaleTimeString('en-GB', {
     hour: '2-digit',
     minute: '2-digit',

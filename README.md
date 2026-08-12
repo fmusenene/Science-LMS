@@ -1,6 +1,6 @@
-# Science LMS — Laboratory Management System
+# Science LMS | Laboratory Management System
 
-Centralised school science laboratory software for **inventory**, **practical lesson requisitions**, **lab bookings**, **stock reservation**, and **session logging**.
+School software for science labs: inventory, practical requisitions, lab bookings, stock reservation, and session logging.
 
 **Repository:** [github.com/fmusenene/Science-LMS](https://github.com/fmusenene/Science-LMS)
 
@@ -26,13 +26,13 @@ Centralised school science laboratory software for **inventory**, **practical le
 
 Science LMS helps a school science department:
 
-- Book laboratories without double-booking rooms or over-allocating stock
-- Submit practical requisitions (apparatus, chemicals, reagents) with conflict checks
+- Book laboratories without double booking rooms or over allocating stock
+- Submit practical requisitions for apparatus, chemicals and reagents, with conflict checks
 - Approve and reserve stock before the lesson
-- Prepare labs, run sessions, and reconcile consumables / breakages afterward
+- Prepare labs, run sessions, and record what was used or broken afterward
 - Manage users, roles, timetable periods, and an audit trail
 
-Data is stored in a **shared JSON database file** on the server (`data/lms-db.json`) so teachers and admins see the same requisitions when `npm run dev` / `npm start` is running. Authentication uses **httpOnly session cookies** and **scrypt-hashed passwords**.
+Data is stored in a shared JSON database file on the server (`data/lms-db.json`) so teachers and admins see the same requisitions when `npm run dev` or `npm start` is running. Sign in uses httpOnly session cookies and scrypt hashed passwords.
 
 ---
 
@@ -169,7 +169,7 @@ lib/
   scheduling.ts            # Conflicts, slots, formatting
   permissions.ts           # Permission catalogue & role defaults
   security/                # Passwords, sessions, rate limit, sanitise
-data/                      # Runtime DB (lms-db.json) — not committed
+data/                      # Runtime DB (lms-db.json), not committed
 docs/                      # Extended documentation
 ```
 

@@ -15,9 +15,9 @@ const spaceGrotesk = Space_Grotesk({
 })
 
 export const metadata: Metadata = {
-  title: 'Science LMS — Laboratory Management System',
+  title: 'Science LMS | Laboratory Management System',
   description:
-    'Centralised lab inventory, practical lesson bookings, equipment allocation, and session logging for schools.',
+    'Lab inventory, practical lesson bookings, equipment allocation, and session logging for schools.',
 }
 
 export const viewport: Viewport = {

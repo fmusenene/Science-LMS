@@ -95,8 +95,8 @@ function RequisitionsPageInner() {
         title="Practical requisitions"
         description={
           canApprove
-            ? 'Open Awaiting review, pick a submitted request, then Approve & reserve stock on the detail page.'
-            : 'Your lesson plans and apparatus checklists. Awaiting review lists only your submitted requests.'
+            ? 'Open Awaiting review, choose a submitted request, then approve and reserve stock on the detail page.'
+            : 'Your lesson plans and apparatus checklists. Awaiting review shows only your submitted requests.'
         }
         actions={
           can('requisitions.create') ? (

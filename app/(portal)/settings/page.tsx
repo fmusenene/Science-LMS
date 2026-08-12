@@ -166,7 +166,7 @@ export default function SettingsPage() {
       const dataUrl = await fileToAvatarDataUrl(file)
       setAvatarPreview(dataUrl)
       setProfileDirty(true)
-      toast.message('Photo ready — click Save profile to keep it')
+      toast.message('Photo ready. Click Save profile to keep it.')
     } catch (err) {
       toast.error(err instanceof Error ? err.message : 'Upload failed')
     } finally {

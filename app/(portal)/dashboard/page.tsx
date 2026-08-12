@@ -51,7 +51,7 @@ export default function DashboardPage() {
     <div>
       <PageHeader
         title={`Good day, ${currentUser.name.split(' ')[0]}`}
-        description={`${roleLabel} workspace — inventory, bookings and session control for Labs 1–6.`}
+        description={`${roleLabel} workspace for inventory, bookings and sessions across all labs.`}
         actions={
           <div className="flex flex-wrap gap-2">
             {canApprove ? (
@@ -120,7 +120,7 @@ export default function DashboardPage() {
             <div>
               <CardTitle>Awaiting your review</CardTitle>
               <CardDescription>
-                Teacher submissions ready for approve &amp; reserve — {pending.length} pending
+                Teacher submissions ready to approve and reserve. {pending.length} pending.
               </CardDescription>
             </div>
             <Button nativeButton={false} render={<Link href="/requisitions?tab=queue" />}>

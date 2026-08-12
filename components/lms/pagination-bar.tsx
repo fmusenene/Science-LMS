@@ -42,7 +42,7 @@ export function PaginationBar({
   return (
     <div className="mt-3 flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
       <p className="text-sm text-muted-foreground">
-        Showing <span className="num font-medium text-foreground">{start}</span>–
+        Showing <span className="num font-medium text-foreground">{start}</span> to{' '}
         <span className="num font-medium text-foreground">{end}</span> of{' '}
         <span className="num font-medium text-foreground">{total}</span>
       </p>

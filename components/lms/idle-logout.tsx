@@ -37,7 +37,7 @@ export function IdleLogout() {
 
     const logout = () => {
       signOutRef.current()
-      toast.message('Signed out due to inactivity (5 minutes).', { id: 'idle-logout' })
+      toast.message('Signed out after 5 minutes of inactivity.', { id: 'idle-logout' })
       router.replace('/')
     }
 

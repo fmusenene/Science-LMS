@@ -199,19 +199,19 @@ export default function RequisitionDetailPage() {
               <CardTitle>Booking</CardTitle>
             </CardHeader>
             <CardContent className="grid gap-3 sm:grid-cols-2 text-sm">
-              <Field label="Laboratory" value={`${lab?.name ?? '—'} (${lab?.code})`} />
+              <Field label="Laboratory" value={`${lab?.name ?? 'Not set'} (${lab?.code})`} />
               <Field label="Slot" value={`${formatDate(req.slot.date)} · ${formatSlot(req.slot)}`} />
-              <Field label="Teacher" value={teacher?.name ?? '—'} />
+              <Field label="Teacher" value={teacher?.name ?? 'Not set'} />
               <Field label="Class" value={`${req.form} · ${req.studentCount} students`} />
-              <Field label="Capacity check" value={lab ? `${lab.capacity} seats` : '—'} />
+              <Field label="Capacity check" value={lab ? `${lab.capacity} seats` : 'Not set'} />
               <Field label="Submitted" value={formatDateTime(req.submittedAt)} />
               <div className="sm:col-span-2">
                 <p className="text-xs text-muted-foreground">Objectives</p>
-                <p className="mt-0.5">{req.objectives || '—'}</p>
+                <p className="mt-0.5">{req.objectives || 'Not set'}</p>
               </div>
               <div className="sm:col-span-2">
                 <p className="text-xs text-muted-foreground">Safety notes</p>
-                <p className="mt-0.5">{req.safetyNotes || '—'}</p>
+                <p className="mt-0.5">{req.safetyNotes || 'Not set'}</p>
               </div>
               {req.reviewNote ? (
                 <div className="sm:col-span-2 rounded-lg bg-muted/70 px-3 py-2">
@@ -263,14 +263,14 @@ export default function RequisitionDetailPage() {
               <CardContent className="grid gap-3 text-sm sm:grid-cols-2">
                 <Field
                   label="Planned"
-                  value={`${formatTime(session.plannedStart)} – ${formatTime(session.plannedEnd)} (${durationMinutes(session.plannedStart, session.plannedEnd)} min)`}
+                  value={`${formatTime(session.plannedStart)} to ${formatTime(session.plannedEnd)} (${durationMinutes(session.plannedStart, session.plannedEnd)} min)`}
                 />
                 <Field
                   label="Actual"
-                  value={`${formatTime(session.actualStart)} – ${formatTime(session.actualEnd)} (${durationMinutes(session.actualStart, session.actualEnd)} min)`}
+                  value={`${formatTime(session.actualStart)} to ${formatTime(session.actualEnd)} (${durationMinutes(session.actualStart, session.actualEnd)} min)`}
                 />
                 <Field label="Students present" value={String(session.studentsPresent)} />
-                <Field label="Logged by" value={userById(session.loggedBy)?.name ?? '—'} />
+                <Field label="Logged by" value={userById(session.loggedBy)?.name ?? 'Not set'} />
                 {session.notDoneReason ? (
                   <Field
                     label="Not-done reason"
@@ -282,7 +282,7 @@ export default function RequisitionDetailPage() {
                 ) : null}
                 <div className="sm:col-span-2">
                   <p className="text-xs text-muted-foreground">Remarks</p>
-                  <p className="mt-0.5">{session.remarks || '—'}</p>
+                  <p className="mt-0.5">{session.remarks || 'Not set'}</p>
                 </div>
               </CardContent>
             </Card>
@@ -340,7 +340,7 @@ export default function RequisitionDetailPage() {
                         })
                         return
                       }
-                      toast.success('Submitted — admin and lab attendants have been notified', {
+                      toast.success('Submitted. Admin and lab attendants have been notified.', {
                         duration: 5_500,
                         id: 'req-save',
                       })

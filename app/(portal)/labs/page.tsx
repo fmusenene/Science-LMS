@@ -124,7 +124,7 @@ export default function LabsPage() {
                 {lab.notes ? <p className="text-xs text-muted-foreground">{lab.notes}</p> : null}
                 {bookings.slice(0, 3).map((b) => (
                   <p key={b.id} className="text-xs text-muted-foreground">
-                    {formatDate(b.slot.date)} {formatSlot(b.slot)} — {b.reference} (
+                    {formatDate(b.slot.date)} {formatSlot(b.slot)}: {b.reference} (
                     {userById(b.teacherId)?.name})
                   </p>
                 ))}
