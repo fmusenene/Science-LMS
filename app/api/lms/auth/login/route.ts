@@ -69,6 +69,25 @@ export async function POST(request: Request) {
     return res
   } catch (error) {
     console.error('[api/lms/auth/login]', error)
+    const message = error instanceof Error ? error.message : ''
+    if (message.includes('DATABASE_URL')) {
+      return NextResponse.json(
+        {
+          error:
+            'Database is not configured. In Vercel set DATABASE_URL, then Redeploy.',
+        },
+        { status: 500 },
+      )
+    }
+    if (/neon|postgres|fetch failed|ECONN|ssl|timeout|password authentication/i.test(message)) {
+      return NextResponse.json(
+        {
+          error:
+            'Cannot reach the database. Check DATABASE_URL in Vercel (use the pooled Neon URL, sslmode=require) and Redeploy.',
+        },
+        { status: 500 },
+      )
+    }
     return NextResponse.json({ error: 'Sign-in failed.' }, { status: 500 })
   }
 }

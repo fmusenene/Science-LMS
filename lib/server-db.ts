@@ -20,6 +20,14 @@ export function usesCloudDatabase() {
   return Boolean(process.env.DATABASE_URL?.trim())
 }
 
+function assertCloudDatabaseOnVercel() {
+  if (process.env.VERCEL && !usesCloudDatabase()) {
+    throw new Error(
+      'DATABASE_URL is not set. On Vercel open Settings → Environment Variables, add DATABASE_URL (Neon), then Redeploy.',
+    )
+  }
+}
+
 async function ensureDir() {
   await fs.mkdir(DATA_DIR, { recursive: true })
 }
@@ -59,11 +67,13 @@ async function writeFileData(data: LmsData): Promise<LmsData> {
 }
 
 export async function readServerData(): Promise<LmsData> {
+  assertCloudDatabaseOnVercel()
   if (usesCloudDatabase()) return readNeonData()
   return readFileData()
 }
 
 export async function writeServerData(data: LmsData): Promise<LmsData> {
+  assertCloudDatabaseOnVercel()
   if (usesCloudDatabase()) return writeNeonData(data)
   return writeFileData(data)
 }
@@ -104,6 +114,7 @@ function buildMerged(current: LmsData, incoming: LmsData): LmsData | 'noop' {
 
 /** Merge client payload with the shared DB so no account loses the other's submissions. */
 export async function mergeAndSave(incoming: LmsData): Promise<LmsData> {
+  assertCloudDatabaseOnVercel()
   if (!usesCloudDatabase()) {
     const current = await readFileData()
     const merged = buildMerged(current, incoming)

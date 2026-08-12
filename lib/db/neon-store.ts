@@ -9,13 +9,32 @@ const ROW_ID = 'default'
 let sql: NeonQueryFunction<false, false> | null = null
 let schemaReady = false
 
+/**
+ * Neon sometimes adds channel_binding=require which breaks some serverless drivers.
+ * Keep sslmode=require for encrypted connections.
+ */
+export function normalizeDatabaseUrl(raw: string): string {
+  try {
+    const url = new URL(raw)
+    url.searchParams.delete('channel_binding')
+    if (!url.searchParams.get('sslmode')) {
+      url.searchParams.set('sslmode', 'require')
+    }
+    return url.toString()
+  } catch {
+    return raw
+      .replace(/([?&])channel_binding=require&?/g, '$1')
+      .replace(/[?&]$/, '')
+  }
+}
+
 function getSql() {
-  const url = process.env.DATABASE_URL?.trim()
-  if (!url) {
-    throw new Error('DATABASE_URL is not set')
+  const raw = process.env.DATABASE_URL?.trim()
+  if (!raw) {
+    throw new Error('DATABASE_URL is not set. Add it in Vercel Environment Variables and redeploy.')
   }
   if (!sql) {
-    sql = neon(url)
+    sql = neon(normalizeDatabaseUrl(raw))
   }
   return sql
 }
@@ -39,6 +58,11 @@ function normalize(parsed: LmsData): LmsData {
   return sanitizeNotifications(parsed)
 }
 
+function asJsonPayload(data: LmsData) {
+  // neon tagged templates accept objects as JSON; string + ::jsonb is also fine.
+  return JSON.stringify(sanitizeNotifications(data))
+}
+
 async function seedIfEmpty(): Promise<LmsData> {
   const seed = createSeedData()
   const { data: hashedSeed } = ensureHashedPasswords(seed)
@@ -46,9 +70,20 @@ async function seedIfEmpty(): Promise<LmsData> {
   const db = getSql()
   await db`
     INSERT INTO lms_data (id, payload, updated_at)
-    VALUES (${ROW_ID}, ${JSON.stringify(clean)}::jsonb, NOW())
+    VALUES (${ROW_ID}, ${asJsonPayload(clean)}::jsonb, NOW())
     ON CONFLICT (id) DO NOTHING
   `
+  // Re-read in case another instance seeded first.
+  const rows = await db`
+    SELECT payload FROM lms_data WHERE id = ${ROW_ID} LIMIT 1
+  `
+  if (rows[0]?.payload) {
+    return normalize(
+      typeof rows[0].payload === 'string'
+        ? (JSON.parse(rows[0].payload) as LmsData)
+        : (rows[0].payload as LmsData),
+    )
+  }
   return clean
 }
 
@@ -85,7 +120,7 @@ export async function writeNeonData(data: LmsData): Promise<LmsData> {
   const db = getSql()
   await db`
     INSERT INTO lms_data (id, payload, updated_at)
-    VALUES (${ROW_ID}, ${JSON.stringify(clean)}::jsonb, NOW())
+    VALUES (${ROW_ID}, ${asJsonPayload(clean)}::jsonb, NOW())
     ON CONFLICT (id) DO UPDATE
       SET payload = EXCLUDED.payload,
           updated_at = NOW()
@@ -106,7 +141,7 @@ export async function writeNeonDataIfRevision(
   const db = getSql()
   const rows = await db`
     UPDATE lms_data
-    SET payload = ${JSON.stringify(clean)}::jsonb,
+    SET payload = ${asJsonPayload(clean)}::jsonb,
         updated_at = NOW()
     WHERE id = ${ROW_ID}
       AND COALESCE((payload->>'revision')::int, 0) = ${expectedRevision}
